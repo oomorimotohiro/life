@@ -11,6 +11,9 @@ DATE=$(date +%Y-%m-%d)
 TIME=$(date +%H:%M:%S)
 TIMESTAMP="${DATE} ${TIME}"
 
+# Create directory if it doesn't exist
+mkdir -p thoughts
+
 # Append to thoughts file
 FILENAME="thoughts/${DATE}.md"
 

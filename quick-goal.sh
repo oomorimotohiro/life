@@ -11,9 +11,20 @@ DATE=$(date +%Y-%m-%d)
 GOAL_TITLE="$1"
 GOAL_DESC="$2"
 
-# Create a safe filename from the goal title
-# Use hash of the title to create a unique identifier
-HASH=$(echo -n "$GOAL_TITLE" | md5sum | cut -c1-8)
+# Create directory if it doesn't exist
+mkdir -p goal
+
+# Create a safe filename using timestamp and hash for uniqueness
+# Use a portable hash method that works on both Linux and macOS
+if command -v md5sum &> /dev/null; then
+    HASH=$(echo -n "$GOAL_TITLE" | md5sum | cut -c1-8)
+elif command -v md5 &> /dev/null; then
+    HASH=$(echo -n "$GOAL_TITLE" | md5 | cut -c1-8)
+else
+    # Fallback to timestamp if neither md5 command is available
+    HASH=$(date +%s | tail -c 8)
+fi
+
 FILENAME="goal/${DATE}-${HASH}.md"
 
 # Create goal file
